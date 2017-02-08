@@ -11,21 +11,17 @@ using System.Text;
 
 public class Portfolio
 {
-	protected virtual Dictionary<string,Position> positions
-	{
-		get;
-		set;
-	}
+	protected Dictionary<string, Position> positions;
 
-	public virtual IEnumerable<Position> Position
+	public virtual double Value
 	{
-		get;
-		set;
-	}
-
-	public virtual double AccountBalance()
-	{
-		throw new System.NotImplementedException();
+        get
+        {
+            double returnVal = 0;
+            foreach (Position p in this.positions.Values)
+                returnVal += p.value;
+            return returnVal;
+        }
 	}
 
 	public virtual void ToString()
@@ -33,23 +29,30 @@ public class Portfolio
 		throw new System.NotImplementedException();
 	}
 
-	public virtual bool Purchase(string symbol, Trade purchase)
+	public virtual void Purchase(string symbol, Purchase purchase)
 	{
-		throw new System.NotImplementedException();
+        if (!this.positions.Keys.Contains(symbol))
+            this.positions.Add(symbol, new Position(purchase));
+        else
+            this.positions[symbol].Purchase(purchase);
 	}
 
-	public virtual bool Sell(string symbol, Trade sale)
+	public virtual void Sell(string symbol, Sale sale)
 	{
-		throw new System.NotImplementedException();
+        this.positions[symbol].Sell(sale);
 	}
 
 	public virtual double GainLossReport(DateTime startDate, DateTime endDate)
 	{
-		throw new System.NotImplementedException();
+        double returnVal = 0;
+        foreach (Position p in this.positions.Values)
+            returnVal += p.GainLossReport(startDate, endDate);
+        return returnVal;
 	}
 
 	public Portfolio()
 	{
+        this.positions = new Dictionary<string, Position>();
 	}
 
 }

@@ -42,6 +42,8 @@
   <ItemGroup>
     <Compile Include="GeneratedCode\Portfolio.cs" />
     <Compile Include="GeneratedCode\Position.cs" />
+    <Compile Include="GeneratedCode\Purchase.cs" />
+    <Compile Include="GeneratedCode\Sale.cs" />
     <Compile Include="GeneratedCode\Simulator.cs" />
     <Compile Include="GeneratedCode\Stock.cs" />
     <Compile Include="GeneratedCode\Trade.cs" />

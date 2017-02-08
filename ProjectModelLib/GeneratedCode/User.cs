@@ -11,89 +11,92 @@ using System.Text;
 
 public class User
 {
-	protected virtual Dictionary<string, Portfolio> portfolios
+	protected int numPorts;
+
+    protected double _balance;
+	public virtual double balance
 	{
-		get;
-		set;
+		get { return this._balance; }
 	}
 
-	protected virtual int numPorts
-	{
-		get;
-		set;
-	}
-
-	protected virtual double balance
-	{
-		get;
-		set;
-	}
-
+    protected double _tradeFee;
 	public virtual double tradeFee
 	{
-		get;
-		private set;
+		get { return this._tradeFee; }
 	}
 
-	public virtual double transferFee
+    protected double _transferFee;
+    public virtual double transferFee
 	{
-		get;
-		private set;
+		get { return this._transferFee; }
 	}
 
-	public virtual IEnumerable<Portfolio> Portfolio
-	{
-		get;
-		set;
-	}
-
-	public virtual double AccountBalance()
-	{
-		throw new System.NotImplementedException();
-	}
+	protected Dictionary<string, Portfolio> portfolios;
 
 	public virtual void AddFunds(double addAmount)
 	{
-		throw new System.NotImplementedException();
+        if (addAmount <= this._transferFee)
+            throw new ArgumentOutOfRangeException();
+        this._balance += addAmount - this._transferFee;
 	}
 
-	public virtual bool WithdrawFunds(double withAmount)
+	public virtual void WithdrawFunds(double withAmount)
 	{
-		throw new System.NotImplementedException();
-	}
+        if (withAmount + this._transferFee < this._balance)
+            throw new ArgumentOutOfRangeException();
+        this._balance -= withAmount - this._transferFee;
+    }
 
 	public User(double newTradeFee, double newTransferFee, double initBalance)
 	{
+        this._tradeFee = newTradeFee;
+        this._transferFee = newTransferFee;
+        this._balance = initBalance;
 	}
 
-	public virtual bool AddPortfolio(string portName)
+	public virtual void AddPortfolio(string portName)
 	{
-		throw new System.NotImplementedException();
+        if (this.numPorts >= 3)
+            throw new ArgumentOutOfRangeException();
+        this.portfolios.Add(portName, new Portfolio());
 	}
 
-	public virtual bool Purchase(string port, string symbol, int numShares, double shareValue, DateTime tradeDate)
+	public virtual void Purchase(string port, string symbol, int numShares, double shareValue, DateTime tradeDate)
 	{
-		throw new System.NotImplementedException();
+        double purchaseAmount = numShares * shareValue + this._tradeFee;
+        if (purchaseAmount > this._balance)
+            throw new ArgumentOutOfRangeException();
+        this.portfolios[port].Purchase(symbol, new Purchase(numShares, shareValue, tradeDate));
+        this._balance -= purchaseAmount;
 	}
 
-	public virtual bool Sell(string port, string symbol, int numShares, double shareValue, DateTime tradeDate)
+	public virtual void Sell(string port, string symbol, int numShares, double shareValue, DateTime tradeDate)
 	{
-		throw new System.NotImplementedException();
-	}
+        double sellAmount = numShares * shareValue - this._tradeFee;
+        if (sellAmount <= 0)
+            throw new ArgumentOutOfRangeException();
+        this.portfolios[port].Sell(symbol, new Sale(numShares, shareValue, tradeDate));
+        this._balance += sellAmount;
+    }
 
 	public virtual void ToString()
 	{
 		throw new System.NotImplementedException();
 	}
 
-	public virtual bool DeletePortfolio(string portName)
+	public virtual void DeletePortfolio(string portName)
 	{
-		throw new System.NotImplementedException();
+        if (this.portfolios[portName].Value > this._tradeFee)
+            this._balance += this.portfolios[portName].Value;
+        this.portfolios.Remove(portName);
 	}
 
 	public virtual double GainLossReport(string portName, DateTime startDate, DateTime endDate)
 	{
-		throw new System.NotImplementedException();
+        double returnVal = 0;
+        foreach (Portfolio p in this.portfolios.Values)
+            returnVal += p.Value;
+        return returnVal;
 	}
 
 }

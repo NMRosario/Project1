@@ -11,29 +11,9 @@ using System.Text;
 
 public class Simulator
 {
-	protected virtual User user1
-	{
-		get;
-		set;
-	}
+	public User user;
 
-	protected virtual Dictionary<string,Stock> stocks
-	{
-		get;
-		set;
-	}
-
-	public virtual User User
-	{
-		get;
-		set;
-	}
-
-	public virtual Stock Stock
-	{
-		get;
-		set;
-	}
+	public Stock stocks;
 
 	public Simulator()
 	{

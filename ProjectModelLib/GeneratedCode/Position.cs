@@ -11,53 +11,66 @@ using System.Text;
 
 public class Position
 {
-	protected virtual List<Trade> purchases
-	{
-		get;
-		set;
-	}
-
-	protected virtual List<Trade> sales
-	{
-		get;
-		set;
-	}
-
+    protected int numShares
+    {
+        get
+        {
+            int returnVal = 0;
+            foreach (Trade purchase in this.trades)
+                returnVal += purchase.numShares;
+            return returnVal;
+        }
+    }
 	public virtual double value
 	{
-		get;
-		private set;
+		get
+        {
+            double returnVal = 0;
+            foreach (Trade purchase in this.trades)
+                returnVal += purchase.value;
+            return returnVal;
+        }
 	}
 
-	public virtual IEnumerable<Trade> Trade
-	{
-		get;
-		set;
-	}
-
-	public virtual IEnumerable<Trade> Trade
-	{
-		get;
-		set;
-	}
+	protected Stack<Trade> trades;
 
 	public virtual double GainLossReport(DateTime startDate, DateTime endDate)
 	{
-		throw new System.NotImplementedException();
+        double returnVal = 0;
+        Stack<Trade> tradesCopy = new Stack<Trade>(this.trades);
+        Trade nextTrade = tradesCopy.Pop();
+        while (nextTrade.tradeDate.CompareTo(endDate) > 0)
+        {
+            nextTrade = tradesCopy.Pop();
+            if (tradesCopy.Peek() == null)
+                return returnVal;
+        }
+        while (nextTrade.tradeDate.CompareTo(startDate) >= 0)
+        {
+            returnVal += nextTrade.value;
+            nextTrade = tradesCopy.Pop();
+            if (tradesCopy.Peek() == null)
+                return returnVal;
+        }
+        return returnVal;
+    }
+
+	public Position(Purchase initPurchase)
+	{
+        this.trades = new Stack<Trade>();
+        this.Purchase(initPurchase);
 	}
 
-	public Position(double currPrice, int initalShares, DateTime purchaseDate)
+	public virtual void Purchase(Purchase purchase)
 	{
+        this.trades.Push(purchase);
 	}
 
-	public virtual bool Purchase(Trade purchase)
+	public virtual void Sell(Sale sale)
 	{
-		throw new System.NotImplementedException();
-	}
-
-	public virtual bool Sell(Trade purchase)
-	{
-		throw new System.NotImplementedException();
+        if (sale.numShares > this.numShares)
+            throw new ArgumentOutOfRangeException();
+        this.trades.Push(sale);
 	}
 
 }

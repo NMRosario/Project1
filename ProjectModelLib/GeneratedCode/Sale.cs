@@ -9,30 +9,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public abstract class Trade
+public class Sale : Trade
 {
-    protected int _numShares;
-	public virtual int numShares
+	public override double value
 	{
-		get { return this._numShares; }
+		get { return -1 * this._numShares * this._shareValue; }
 	}
-
-    protected double _shareValue;
-	public virtual double shareValue
-	{
-		get { return this._shareValue; }
-	}
-
-	public abstract double value
-	{
-        get;
-	}
-
-    protected DateTime _tradeDate;
-	public virtual DateTime tradeDate
-	{
-		get { return this._tradeDate; }
-	}
-
+    public Sale(int newNumShares, double newShareValue, DateTime newTradeDate)
+    {
+        this._numShares = newNumShares;
+        this._shareValue = newShareValue;
+        this._tradeDate = newTradeDate;
+    }
 }
 
