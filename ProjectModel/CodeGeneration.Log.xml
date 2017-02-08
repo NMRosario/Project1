@@ -6,25 +6,42 @@
   <MessageClass Name="Error" Label="Error" Option="Show errors" />
   <MessageClass Name="Property" Label="Property" Option="Show metadata" />
   <MessageClass Name="Diagnostic" Label="Message" Option="Show diagnostic messages" />
-  <Message Timestamp="2017-02-07T14:16:21" Importance="High" Text="Code generation or text transformation started." />
-  <Message Timestamp="2017-02-07T14:16:21" Importance="Diagnostic" Text="Name = ClassTemplate" />
-  <Message Timestamp="2017-02-07T14:16:21" Importance="Diagnostic" Text="Overwrite = True" />
-  <Message Timestamp="2017-02-07T14:16:21" Importance="Diagnostic" Text="ProjectPath = ..\ProjectModelLib\ProjectModelLib.csproj" />
-  <Message Timestamp="2017-02-07T14:16:21" Importance="Diagnostic" Text="TargetDirectory = GeneratedCode\{PackageStructure}" />
-  <Message Timestamp="2017-02-07T14:16:21" Importance="Diagnostic" Text="TargetName = {Name}" />
-  <Message Timestamp="2017-02-07T14:16:21" Importance="Diagnostic" Text="TemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 14.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\ClassTemplate.t4" />
-  <Message Timestamp="2017-02-07T14:16:21" Importance="Diagnostic" Text="ResolvedTemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 14.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\ClassTemplate.t4" />
-  <Message Timestamp="2017-02-07T14:16:21" Importance="Medium" Text="ProjectModel's Text Template Binding: 'ClassTemplate' will apply ClassTemplate.t4 to: 'ProjectModel::Trade' -  (Class) " />
-  <Message Timestamp="2017-02-07T14:16:32" Importance="Medium" Text="Project Added: c:\users\nmrosario\documents\visual studio 2015\Projects\PA1\ProjectModelLib\ProjectModelLib.csproj" />
-  <Message Timestamp="2017-02-07T14:16:32" Importance="Medium" Text="'ProjectModel::Trade' -  (Class) : success (file created) - c:\users\nmrosario\documents\visual studio 2015\Projects\PA1\ProjectModelLib\GeneratedCode\Trade.cs" />
-  <Message Timestamp="2017-02-07T14:16:32" Importance="Diagnostic" Text="Name = StructTemplate" />
-  <Message Timestamp="2017-02-07T14:16:32" Importance="Diagnostic" Text="Overwrite = True" />
-  <Message Timestamp="2017-02-07T14:16:32" Importance="Diagnostic" Text="ProjectPath = ..\ProjectModelLib\ProjectModelLib.csproj" />
-  <Message Timestamp="2017-02-07T14:16:32" Importance="Diagnostic" Text="TargetDirectory = GeneratedCode\{PackageStructure}" />
-  <Message Timestamp="2017-02-07T14:16:32" Importance="Diagnostic" Text="TargetName = {Name}" />
-  <Message Timestamp="2017-02-07T14:16:32" Importance="Diagnostic" Text="TemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 14.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\StructTemplate.t4" />
-  <Message Timestamp="2017-02-07T14:16:32" Importance="Diagnostic" Text="ResolvedTemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 14.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\StructTemplate.t4" />
-  <Message Timestamp="2017-02-07T14:16:32" Importance="Medium" Text="ProjectModel's Text Template Binding: 'StructTemplate' will apply StructTemplate.t4 to: 'ProjectModel::Trade' -  (Class) " />
-  <Message Timestamp="2017-02-07T14:16:32" Importance="Diagnostic" Text="'ProjectModel::Trade' -  (Class): no file generated because the 'AppliesToElement' method of the template 'StructTemplate.t4' evaluated to false." />
-  <Message Timestamp="2017-02-07T14:16:32" Importance="High" Text="Code generation complete. Errors: 0. Warnings: 0." />
+  <Message Timestamp="2017-02-07T18:13:41" Importance="High" Text="Code generation or text transformation started." />
+  <Message Timestamp="2017-02-07T18:13:41" Importance="Diagnostic" Text="Name = ClassTemplate" />
+  <Message Timestamp="2017-02-07T18:13:41" Importance="Diagnostic" Text="Overwrite = True" />
+  <Message Timestamp="2017-02-07T18:13:41" Importance="Diagnostic" Text="ProjectPath = ..\ProjectModelLib\ProjectModelLib.csproj" />
+  <Message Timestamp="2017-02-07T18:13:41" Importance="Diagnostic" Text="TargetDirectory = GeneratedCode\{PackageStructure}" />
+  <Message Timestamp="2017-02-07T18:13:41" Importance="Diagnostic" Text="TargetName = {Name}" />
+  <Message Timestamp="2017-02-07T18:13:41" Importance="Diagnostic" Text="TemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 14.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\ClassTemplate.t4" />
+  <Message Timestamp="2017-02-07T18:13:41" Importance="Diagnostic" Text="ResolvedTemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 14.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\ClassTemplate.t4" />
+  <Message Timestamp="2017-02-07T18:13:41" Importance="Medium" Text="ProjectModel's Text Template Binding: 'ClassTemplate' will apply ClassTemplate.t4 to: 'ProjectModel::User' -  (Class), 'ProjectModel::Simulator' -  (Class), 'ProjectModel::Stock' -  (Class), 'ProjectModel::Portfolio' -  (Class), 'ProjectModel::Position' -  (Class), 'ProjectModel::Trade' -  (Class) " />
+  <Message Timestamp="2017-02-07T18:13:50" Importance="Medium" Text="Project Added: c:\users\nmrosario\documents\visual studio 2015\Projects\PA1\ProjectModelLib\ProjectModelLib.csproj" />
+  <Message Timestamp="2017-02-07T18:13:50" Importance="Medium" Text="'ProjectModel::User' -  (Class) : success (file created) - c:\users\nmrosario\documents\visual studio 2015\Projects\PA1\ProjectModelLib\GeneratedCode\User.cs" />
+  <Message Timestamp="2017-02-07T18:13:50" Importance="Medium" Text="'ProjectModel::Simulator' -  (Class) : success (file created) - c:\users\nmrosario\documents\visual studio 2015\Projects\PA1\ProjectModelLib\GeneratedCode\Simulator.cs" />
+  <Message Timestamp="2017-02-07T18:13:50" Importance="Medium" Text="'ProjectModel::Stock' -  (Class) : success (file created) - c:\users\nmrosario\documents\visual studio 2015\Projects\PA1\ProjectModelLib\GeneratedCode\Stock.cs" />
+  <Message Timestamp="2017-02-07T18:13:50" Importance="Medium" Text="'ProjectModel::Portfolio' -  (Class) : success (file created) - c:\users\nmrosario\documents\visual studio 2015\Projects\PA1\ProjectModelLib\GeneratedCode\Portfolio.cs" />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Medium" Text="'ProjectModel::Position' -  (Class) : success (file created) - c:\users\nmrosario\documents\visual studio 2015\Projects\PA1\ProjectModelLib\GeneratedCode\Position.cs" />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Medium" Text="'ProjectModel::Trade' -  (Class) : success (file created) - c:\users\nmrosario\documents\visual studio 2015\Projects\PA1\ProjectModelLib\GeneratedCode\Trade.cs" />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="Name = StructTemplate" />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="Overwrite = True" />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="ProjectPath = ..\ProjectModelLib\ProjectModelLib.csproj" />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="TargetDirectory = GeneratedCode\{PackageStructure}" />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="TargetName = {Name}" />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="TemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 14.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\StructTemplate.t4" />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="ResolvedTemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 14.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\StructTemplate.t4" />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Medium" Text="ProjectModel's Text Template Binding: 'StructTemplate' will apply StructTemplate.t4 to: 'ProjectModel::User' -  (Class), 'ProjectModel::Simulator' -  (Class), 'ProjectModel::Stock' -  (Class), 'ProjectModel::Portfolio' -  (Class), 'ProjectModel::Position' -  (Class), 'ProjectModel::Trade' -  (Class) " />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="'ProjectModel::User' -  (Class): no file generated because the 'AppliesToElement' method of the template 'StructTemplate.t4' evaluated to false." />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="'ProjectModel::Simulator' -  (Class): no file generated because the 'AppliesToElement' method of the template 'StructTemplate.t4' evaluated to false." />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="'ProjectModel::Stock' -  (Class): no file generated because the 'AppliesToElement' method of the template 'StructTemplate.t4' evaluated to false." />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="'ProjectModel::Portfolio' -  (Class): no file generated because the 'AppliesToElement' method of the template 'StructTemplate.t4' evaluated to false." />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="'ProjectModel::Position' -  (Class): no file generated because the 'AppliesToElement' method of the template 'StructTemplate.t4' evaluated to false." />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="'ProjectModel::Trade' -  (Class): no file generated because the 'AppliesToElement' method of the template 'StructTemplate.t4' evaluated to false." />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="The selection included 6 elements which were not bound to a template." />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="'ProjectModel::user1' -  (Association): no bound template." />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="'ProjectModel::portfolios' -  (Association): no bound template." />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="'ProjectModel::stocks' -  (Association): no bound template." />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="'ProjectModel::positions' -  (Association): no bound template." />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="'ProjectModel::purchases' -  (Association): no bound template." />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="Diagnostic" Text="'ProjectModel::sales' -  (Association): no bound template." />
+  <Message Timestamp="2017-02-07T18:13:51" Importance="High" Text="Code generation complete. Errors: 0. Warnings: 0." />
 </Log>
