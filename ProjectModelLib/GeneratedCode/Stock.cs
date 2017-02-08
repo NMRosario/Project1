@@ -11,21 +11,22 @@ using System.Text;
 
 public class Stock
 {
+    protected double _price;
 	public virtual double price
 	{
-		get;
-		private set;
+		get { return this._price; }
 	}
 
+    protected string _name;
 	public virtual string name
 	{
-		get;
-		private set;
+		get { return this._name; }
 	}
 
-	public virtual void Stock(initName:string, initPrice:double()
+	public Stock(string initName, double initPrice)
 	{
-		throw new System.NotImplementedException();
+        this._price = initPrice;
+        this._name = initName;
 	}
 
 }

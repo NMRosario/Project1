@@ -11,13 +11,13 @@ using System.Text;
 
 public class User
 {
-	protected int numPorts;
+	protected int _numPorts;
 
+    public int numPorts
+    {
+        get { return this._numPorts; }
+    }
     protected double _balance;
-	public virtual double balance
-	{
-		get { return this._balance; }
-	}
 
     protected double _tradeFee;
 	public virtual double tradeFee
@@ -33,55 +33,68 @@ public class User
 
 	protected Dictionary<string, Portfolio> portfolios;
 
-	public virtual void AddFunds(double addAmount)
+	public virtual void AddFunds(double addAmount, string port)
 	{
         if (addAmount <= this._transferFee)
             throw new ArgumentOutOfRangeException();
-        this._balance += addAmount - this._transferFee;
+        this.portfolios[port].cash += addAmount - this._transferFee;
 	}
 
-	public virtual void WithdrawFunds(double withAmount)
-	{
-        if (withAmount + this._transferFee < this._balance)
+    public virtual void AddFunds(double addAmount)
+    {
+        if (this._transferFee >= addAmount)
             throw new ArgumentOutOfRangeException();
-        this._balance -= withAmount - this._transferFee;
+        this._balance += addAmount - this._transferFee;
     }
 
-	public User(double newTradeFee, double newTransferFee, double initBalance)
+	public virtual void WithdrawFunds(double withAmount, string port)
 	{
+        if (this._transferFee >= withAmount || this._transferFee + withAmount > this.portfolios[port].cash)
+            throw new ArgumentOutOfRangeException();
+        this.portfolios[port].cash -= withAmount + this._transferFee;
+    }
+
+    public virtual void WithdrawFunds(double withAmount)
+    {
+        if (this._transferFee >= withAmount || this._transferFee + withAmount > this._balance)
+            throw new ArgumentOutOfRangeException();
+        this._balance -= withAmount + this._transferFee;
+    }
+
+	public User(double newTradeFee, double newTransferFee)
+	{
+        this.portfolios = new Dictionary<string, Portfolio>();
         this._tradeFee = newTradeFee;
         this._transferFee = newTransferFee;
-        this._balance = initBalance;
+        this._balance = 0;
 	}
 
 	public virtual void AddPortfolio(string portName)
 	{
-        if (this.numPorts >= 3)
+        if (this._numPorts >= 3)
             throw new ArgumentOutOfRangeException();
         this.portfolios.Add(portName, new Portfolio());
+        this._numPorts++;
 	}
 
 	public virtual void Purchase(string port, string symbol, int numShares, double shareValue, DateTime tradeDate)
 	{
-        double purchaseAmount = numShares * shareValue + this._tradeFee;
-        if (purchaseAmount > this._balance)
-            throw new ArgumentOutOfRangeException();
-        this.portfolios[port].Purchase(symbol, new Purchase(numShares, shareValue, tradeDate));
-        this._balance -= purchaseAmount;
+        this.portfolios[port].Purchase(symbol, this._tradeFee, new Purchase(numShares, shareValue, tradeDate));
 	}
 
 	public virtual void Sell(string port, string symbol, int numShares, double shareValue, DateTime tradeDate)
 	{
-        double sellAmount = numShares * shareValue - this._tradeFee;
-        if (sellAmount <= 0)
-            throw new ArgumentOutOfRangeException();
-        this.portfolios[port].Sell(symbol, new Sale(numShares, shareValue, tradeDate));
-        this._balance += sellAmount;
+        this.portfolios[port].Sell(symbol, this._tradeFee, new Sale(numShares, shareValue, tradeDate));
     }
 
-	public virtual void ToString()
+	public override string ToString()
 	{
-		throw new System.NotImplementedException();
+        string returnVal = "Cash: $" + this._balance + "\n";
+        foreach (string port in this.portfolios.Keys)
+        {
+            returnVal += port + ":\n" + this.portfolios[port].ToString() + "\n";
+        }
+        return returnVal;
 	}
 
 	public virtual void DeletePortfolio(string portName)
@@ -89,13 +102,14 @@ public class User
         if (this.portfolios[portName].Value > this._tradeFee)
             this._balance += this.portfolios[portName].Value;
         this.portfolios.Remove(portName);
+        this._numPorts--;
 	}
 
 	public virtual double GainLossReport(string portName, DateTime startDate, DateTime endDate)
 	{
         double returnVal = 0;
         foreach (Portfolio p in this.portfolios.Values)
-            returnVal += p.Value;
+            returnVal += p.GainLossReport(startDate, endDate);
         return returnVal;
 	}
 

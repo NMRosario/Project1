@@ -11,24 +11,29 @@ using System.Text;
 
 public class Position
 {
-    protected int numShares
+    public int numShares
     {
         get
         {
             int returnVal = 0;
-            foreach (Trade purchase in this.trades)
-                returnVal += purchase.numShares;
+            foreach (Trade trade in this.trades)
+                if (trade is Purchase)
+                    returnVal += trade.numShares;
+                else
+                    returnVal -= trade.numShares;
             return returnVal;
         }
     }
-	public virtual double value
+    protected double _currShareValue;
+    public virtual double currShareValue
+    {
+        get { return this._currShareValue; }
+    }
+    public virtual double value
 	{
 		get
         {
-            double returnVal = 0;
-            foreach (Trade purchase in this.trades)
-                returnVal += purchase.value;
-            return returnVal;
+            return numShares * currShareValue;
         }
 	}
 
@@ -58,6 +63,7 @@ public class Position
 	public Position(Purchase initPurchase)
 	{
         this.trades = new Stack<Trade>();
+        this._currShareValue = initPurchase.shareValue;
         this.Purchase(initPurchase);
 	}
 

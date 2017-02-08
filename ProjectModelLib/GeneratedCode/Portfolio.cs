@@ -17,29 +17,51 @@ public class Portfolio
 	{
         get
         {
-            double returnVal = 0;
+            double returnVal = this._cash;
             foreach (Position p in this.positions.Values)
                 returnVal += p.value;
             return returnVal;
         }
 	}
 
-	public virtual void ToString()
+    protected double _cash;
+    public virtual double cash
+    {
+        get { return this._cash; }
+        set { this._cash = value; }
+    }
+
+    public override string ToString()
 	{
-		throw new System.NotImplementedException();
+        string returnVal = "    Value: $" + Value.ToString() + "\n    Cash: $" + this._cash +
+            " (" + Math.Truncate(this._cash * 10000 / this.Value) / 100 + "%)";
+        foreach (string symbol in this.positions.Keys)
+            if (this.positions[symbol].numShares > 0)
+                returnVal += "\n    " + symbol + ": " + this.positions[symbol].numShares + " shares worth $"
+                    + this.positions[symbol].value + " (" +
+                    Math.Truncate(this.positions[symbol].value * 10000 / this.Value) / 100 + "%)";
+        return returnVal;
 	}
 
-	public virtual void Purchase(string symbol, Purchase purchase)
+	public virtual void Purchase(string symbol, double tradeFee, Purchase purchase)
 	{
+        double purchasePrice = purchase.value + tradeFee;
+        if (purchasePrice > this._cash)
+            throw new ArgumentOutOfRangeException();
         if (!this.positions.Keys.Contains(symbol))
             this.positions.Add(symbol, new Position(purchase));
         else
             this.positions[symbol].Purchase(purchase);
+        this._cash -= purchasePrice;
 	}
 
-	public virtual void Sell(string symbol, Sale sale)
+	public virtual void Sell(string symbol, double tradeFee, Sale sale)
 	{
+        double saleValue = sale.numShares * sale.shareValue - tradeFee;
+        if (saleValue <= 0)
+            throw new ArgumentOutOfRangeException();
         this.positions[symbol].Sell(sale);
+        this._cash += saleValue;
 	}
 
 	public virtual double GainLossReport(DateTime startDate, DateTime endDate)
@@ -53,6 +75,7 @@ public class Portfolio
 	public Portfolio()
 	{
         this.positions = new Dictionary<string, Position>();
+        this._cash = 0;
 	}
 
 }
