@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ProjectModelLib.GeneratedCode;
 
 public class Simulator
 {
@@ -53,190 +54,179 @@ public class Simulator
         this.user = new User(9.99, 4.99);
         this.today = DateTime.Today;
         vol = 0;
-        LoadStocks();
+        this.LoadStocks();
 	}
 
-    void PortMenu()
+    public void Run()
     {
-        ConsoleKey inputKey = ConsoleKey.Spacebar;
-        bool validInputKey = false;
-            System.Console.WriteLine();
-        while (!validInputKey)
+        Func<Menu, bool> RunMenu = (Menu menu) =>
+    {
+        ConsoleKey inputKey = ConsoleKey.NumPad0;
+        while (inputKey != ConsoleKey.Q && inputKey != ConsoleKey.Escape)
         {
-            if (user.numPorts < 3)
-                System.Console.WriteLine("(A) Add Portfolio");
-            System.Console.WriteLine("(D) Delete Portfolio");
-            System.Console.WriteLine("(B) Back");
+            System.Console.WriteLine(today.ToString());
+            System.Console.WriteLine(user.ToString());
+            System.Console.Write(menu.ToString());
             System.Console.Write(">");
-            validInputKey = true;
-            inputKey = Console.ReadKey(true).Key;
-            switch (inputKey)
-            {
-                case ConsoleKey.A:
+            inputKey = System.Console.ReadKey(true).Key;
+            menu.Action(inputKey);
+        }// while
+        return true;
+    };// RunMenu
+        Menu topMenu = new Menu();
+        topMenu[ConsoleKey.P] = new MenuItem("Add or Remove Portfolios", () =>
+        {
+            Menu portMenu = new Menu();
+            MenuItem addPort = new MenuItem("Add Portfolio",
+                () =>
+                {
                     System.Console.Write("\nEnter Portfolio Name: ");
                     string newPort = System.Console.ReadLine();
                     user.AddPortfolio(newPort);
-                    break;
-                case ConsoleKey.D:
-                    try
-                    {
-                        System.Console.Write("\nWhich one? ");
-                        string delPort = System.Console.ReadLine();
-                        user.DeletePortfolio(delPort);
-                    }// try
-                    catch (KeyNotFoundException)
-                    {
-                        System.Console.WriteLine("Invalid Portfolio name\n>");
-                        validInputKey = false;
-                    }
-                    break;
-                case ConsoleKey.B:
-                case ConsoleKey.Escape:
-                    break;
-                default:
-                    validInputKey = false;
-                    break;
-            }
-        }
-    }
-
-    void DayMenu()
-    {
-        ConsoleKey inputKey = ConsoleKey.NumPad0;
-        bool validInputKey = false;
-        System.Console.WriteLine();
-        System.Console.WriteLine("Select Market Volatility:");
-        System.Console.WriteLine("(H) 3%-15%");
-        System.Console.WriteLine("(M) 2%-8%");
-        System.Console.WriteLine("(L) 1%-4%");
-        System.Console.Write(">");
-        while (!validInputKey)
-        {
-            validInputKey = true;
-            inputKey = Console.ReadKey(true).Key;
-            switch (inputKey)
+                    if (user.numPorts >= 3)
+                        portMenu.Remove(ConsoleKey.A);
+                    return true;
+                });
+            if (user.numPorts < 3)
+                portMenu[ConsoleKey.A] = addPort;
+            portMenu[ConsoleKey.D] = new MenuItem("Delete Portfolio", () =>
             {
-                case ConsoleKey.H:
-                    vol = 3;
-                    break;
-                case ConsoleKey.M:
-                    vol = 2;
-                    break;
-                case ConsoleKey.L:
-                    vol = 1;
-                    break;
-                default:
-                    validInputKey = false;
-                    break;
-            }
-        }
-        LoadStocks();
-        today = today.AddDays(1);
-    }
-
-    void MoneyMenu()
-    {
-        ConsoleKey inputKey = ConsoleKey.Spacebar;
-        bool validInputKey = false;
-        System.Console.WriteLine();
-        while (!validInputKey)
+                try
+                {
+                    System.Console.Write("\nWhich one? ");
+                    string delPort = System.Console.ReadLine();
+                    user.DeletePortfolio(delPort);
+                    if (user.numPorts < 3)
+                        portMenu[ConsoleKey.A] = addPort;
+                    return true;
+                }// try
+                catch (KeyNotFoundException)
+                {
+                    System.Console.WriteLine("Invalid Portfolio name\n>");
+                    return false;
+                }
+            });
+            System.Console.WriteLine("(D) Delete Portfolio");
+            portMenu[ConsoleKey.Q] = new MenuItem("Quit Menu", () => { return true; });
+            RunMenu(portMenu);
+            return true;
+        });
+        topMenu[ConsoleKey.X] = new MenuItem("Deposit, Withdraw, or Transfer", () =>
         {
-            System.Console.WriteLine("(D) Deposit Funds");
-            System.Console.WriteLine("(W) Withdraw Funds");
-            System.Console.WriteLine("(X) Transfer Funds");
-            System.Console.WriteLine("(B) Back");
-            System.Console.Write(">");
-            validInputKey = true;
-            inputKey = Console.ReadKey(true).Key;
-            switch (inputKey)
+            Menu moneyMenu = new Menu();
+            moneyMenu[ConsoleKey.D] = new MenuItem("Deposit Funds", () => {
+                try
+                {
+                    System.Console.Write("\nTo which Portfolio? (blank for account) ");
+                    string port = System.Console.ReadLine();
+                    System.Console.Write("\nHow much? ");
+                    double amount = Int32.Parse(System.Console.ReadLine());
+                    if (port == "")
+                        user.AddFunds(amount);
+                    else
+                        user.AddFunds(amount, port);
+                    return true;
+                }// try
+                catch (Exception)
+                {
+                    System.Console.WriteLine("Invalid Input\n>");
+                    return false;
+                }
+            });
+            moneyMenu[ConsoleKey.W] = new MenuItem("Withdraw Funds", () => {
+                try
+                {
+                    System.Console.Write("\nFrom which Portfolio? (blank for account) ");
+                    string port = System.Console.ReadLine();
+                    System.Console.Write("\nHow much? ");
+                    double amount = Int32.Parse(System.Console.ReadLine());
+                    if (port == "")
+                        user.WithdrawFunds(amount);
+                    else
+                        user.WithdrawFunds(amount, port);
+                    return true;
+                }// try
+                catch (Exception)
+                {
+                    System.Console.WriteLine("Invalid Input\n>");
+                    return false;
+                }
+            });
+            moneyMenu[ConsoleKey.X] = new MenuItem("Transfer Funds", () => {
+                try
+                {
+                    System.Console.Write("\nTo which Portfolio? (blank for account) ");
+                    string port2 = System.Console.ReadLine();
+                    System.Console.Write("\nFrom which Portfolio? (blank for account) ");
+                    string port = System.Console.ReadLine();
+                    System.Console.Write("\nHow much? ");
+                    double amount = Int32.Parse(System.Console.ReadLine());
+                    if (port == "")
+                        user.WithdrawFunds(amount + user.transferFee);
+                    else
+                        user.WithdrawFunds(amount + user.transferFee, port);
+                    if (port2 == "")
+                        user.AddFunds(amount + user.transferFee);
+                    else
+                        user.AddFunds(amount + user.transferFee, port2);
+                    return true;
+                }// try
+                catch (Exception)
+                {
+                    System.Console.WriteLine("Invalid Input\n>");
+                    return false;
+                }
+            });
+            moneyMenu[ConsoleKey.Q] = new MenuItem("Quit Menu", () => { return true; });
+            RunMenu(moneyMenu);
+            return true;
+        });
+        topMenu[ConsoleKey.G] = new MenuItem("View Gains/Losses", () =>
+        {
+            try
             {
-                case ConsoleKey.D:
-                    try
-                    {
-                        System.Console.Write("\nTo which Portfolio? (blank for account) ");
-                        string port = System.Console.ReadLine();
-                        System.Console.Write("\nHow much? ");
-                        double amount = Int32.Parse(System.Console.ReadLine());
-                        if (port == "")
-                            user.AddFunds(amount);
-                        else
-                            user.AddFunds(amount, port);
-                    }// try
-                    catch (Exception)
-                    {
-                        System.Console.WriteLine("Invalid Input\n>");
-                        validInputKey = false;
-                    }
-                    break;
-                case ConsoleKey.W:
-                    try
-                    {
-                        System.Console.Write("\nFrom which Portfolio? (blank for account) ");
-                        string port = System.Console.ReadLine();
-                        System.Console.Write("\nHow much? ");
-                        double amount = Int32.Parse(System.Console.ReadLine());
-                        if (port == "")
-                            user.WithdrawFunds(amount);
-                        else
-                            user.WithdrawFunds(amount, port);
-                    }// try
-                    catch (Exception)
-                    {
-                        System.Console.WriteLine("Invalid Input\n>");
-                        validInputKey = false;
-                    }
-                    break;
-                case ConsoleKey.X:
-                    try
-                    {
-                        System.Console.Write("\nTo which Portfolio? (blank for account) ");
-                        string port2 = System.Console.ReadLine();
-                        System.Console.Write("\nFrom which Portfolio? (blank for account) ");
-                        string port = System.Console.ReadLine();
-                        System.Console.Write("\nHow much? ");
-                        double amount = Int32.Parse(System.Console.ReadLine());
-                        if (port == "")
-                            user.WithdrawFunds(amount + user.transferFee);
-                        else
-                            user.WithdrawFunds(amount + user.transferFee, port);
-                        if (port2 == "")
-                            user.AddFunds(amount + user.transferFee);
-                        else
-                            user.AddFunds(amount + user.transferFee, port2);
-                    }// try
-                    catch (Exception)
-                    {
-                        System.Console.WriteLine("Invalid Input\n>");
-                        validInputKey = false;
-                    }
-                    break;
-                case ConsoleKey.B:
-                case ConsoleKey.Escape:
-                    break;
-                default:
-                    validInputKey = false;
-                    break;
+                System.Console.Write("\nEnter Portfolio Name: ");
+                string port = System.Console.ReadLine();
+                System.Console.Write("\nEnter Start Date Year: ");
+                int sYear = Int32.Parse(System.Console.ReadLine());
+                System.Console.Write("\nEnter Start Date Month: ");
+                int sMonth = Int32.Parse(System.Console.ReadLine());
+                System.Console.Write("\nEnter Start Date Day: ");
+                int sDay = Int32.Parse(System.Console.ReadLine());
+                System.Console.Write("\nEnter End Date Year: ");
+                int eYear = Int32.Parse(System.Console.ReadLine());
+                System.Console.Write("\nEnter End Date Month: ");
+                int eMonth = Int32.Parse(System.Console.ReadLine());
+                System.Console.Write("\nEnter End Date Day: ");
+                int eDay = Int32.Parse(System.Console.ReadLine());
+                System.Console.Write("Net Difference of $" +
+                    user.GainLossReport(port, new DateTime(sYear, sMonth, sDay),
+                    new DateTime(eYear, eMonth, eDay)));
+            }// try
+            catch (Exception)
+            {
+                System.Console.WriteLine("Invalid Input\n>");
             }
-        }
-    }
-
-    void PositionMenu()
-    {
-        ConsoleKey inputKey = ConsoleKey.Spacebar;
-        bool validInputKey = false;
-        System.Console.WriteLine();
-        while (!validInputKey)
+            return true;
+        });
+        topMenu[ConsoleKey.S] = new MenuItem("Stock Prices", () =>
         {
+            System.Console.WriteLine();
+            foreach (string symbol in this.stocks.Keys)
+                System.Console.WriteLine(symbol + " $" + this.stocks[symbol].price
+                    + "  " + this.stocks[symbol].name);
+            return true;
+        });
+        topMenu[ConsoleKey.T] = new MenuItem("Trade", () =>
+        {
+            Menu posMenu = new Menu();
             System.Console.WriteLine("(N) Purchase Number of Stock");
             System.Console.WriteLine("(P) Purchase Dollar Amount");
             System.Console.WriteLine("(S) Sell");
             System.Console.WriteLine("(B) Back");
-            System.Console.Write(">");
-            validInputKey = true;
-            inputKey = Console.ReadKey(true).Key;
-            switch (inputKey)
-            {
-                case ConsoleKey.N:
+            posMenu[ConsoleKey.N] = new MenuItem("Purchase Number of Stocks",
+                () =>
+                {
                     try
                     {
                         System.Console.Write("\nEnter Portfolio Name: ");
@@ -246,14 +236,17 @@ public class Simulator
                         System.Console.Write("\nEnter Number of Stocks: ");
                         int amount = Int32.Parse(System.Console.ReadLine());
                         user.Purchase(port, symbol, amount, stocks[symbol].price, today);
+                        return true;
                     }// try
                     catch (Exception)
                     {
                         System.Console.WriteLine("Invalid Input\n>");
-                        validInputKey = false;
+                        return false;
                     }
-                    break;
-                case ConsoleKey.P:
+                });
+            posMenu[ConsoleKey.P] = new MenuItem("Purchase Dollar Amount",
+                () =>
+                {
                     try
                     {
                         System.Console.Write("\nEnter Portfolio Name: ");
@@ -262,16 +255,19 @@ public class Simulator
                         string symbol = System.Console.ReadLine().ToUpper();
                         System.Console.Write("\nEnter Amount to Spend: ");
                         int amount = Int32.Parse(System.Console.ReadLine());
-                        user.Purchase(port, symbol, amount / (int) stocks[symbol].price,
+                        user.Purchase(port, symbol, amount / (int)stocks[symbol].price,
                             stocks[symbol].price, today);
+                        return true;
                     }// try
                     catch (Exception)
                     {
                         System.Console.WriteLine("Invalid Input\n>");
-                        validInputKey = false;
+                        return false;
                     }
-                    break;
-                case ConsoleKey.S:
+                });
+            posMenu[ConsoleKey.S] = new MenuItem("Sell Stocks",
+                () =>
+                {
                     try
                     {
                         System.Console.Write("\nEnter Portfolio Name: ");
@@ -281,104 +277,65 @@ public class Simulator
                         System.Console.Write("\nEnter Number of Sell: ");
                         int amount = Int32.Parse(System.Console.ReadLine());
                         user.Sell(port, symbol, amount, stocks[symbol].price, today);
+                        return true;
                     }// try
                     catch (Exception)
                     {
                         System.Console.WriteLine("Invalid Input\n>");
-                        validInputKey = false;
+                        return false;
                     }
-                    break;
-                case ConsoleKey.B:
-                case ConsoleKey.Escape:
-                    break;
-                default:
-                    validInputKey = false;
-                    break;
-            }
-        }
-    }
-
-    public void Run()
-    {
-        ConsoleKey inputKey = ConsoleKey.NumPad0;
-        bool validInputKey = false;
+                });
+            posMenu[ConsoleKey.Q] = new MenuItem("Quit Menu", () =>
+            {
+                return true;
+            });
+            RunMenu(posMenu);
+            return true;
+        });
+        topMenu[ConsoleKey.Spacebar] = new MenuItem("Advance Day", () =>
+        {
+            Menu dayMenu = new Menu();
+            dayMenu[ConsoleKey.H] = new MenuItem("3%-15%", () =>
+            {
+                vol = 3;
+                return true;
+            });
+            dayMenu[ConsoleKey.M] = new MenuItem("2%-8%", () =>
+            {
+                vol = 2;
+                return true;
+            });
+            dayMenu[ConsoleKey.L] = new MenuItem("1%-4%", () =>
+            {
+                vol = 1;
+                return true;
+            });
+            System.Console.WriteLine("Select Market Volatility:");
+            System.Console.WriteLine(dayMenu.ToString());
+            LoadStocks();
+            today = today.AddDays(1);
+            ConsoleKey inputKey = ConsoleKey.NumPad0;
+            while (inputKey != ConsoleKey.Q && inputKey != ConsoleKey.Escape)
+            {
+                System.Console.WriteLine(today.ToString());
+                System.Console.WriteLine(user.ToString());
+                System.Console.Write(dayMenu.ToString());
+                if (inputKey != ConsoleKey.NumPad0)
+                    System.Console.WriteLine("Day advanced! Advance another day, or hit Q to go back.");
+                System.Console.Write(">");
+                inputKey = System.Console.ReadKey(true).Key;
+                dayMenu.Action(inputKey);
+            }// while
+            return true;
+        });
+        topMenu[ConsoleKey.Q] = new MenuItem("Quit", () =>
+        {
+            return true;
+        });
         user.AddPortfolio("Guile");
         user.AddFunds(10000, "Guile");
         user.Purchase("Guile", "MMMM", 40, 33.3, today);
-        while (inputKey != ConsoleKey.Q && inputKey != ConsoleKey.Escape) {
-            System.Console.WriteLine(today.ToString());
-            System.Console.WriteLine(user.ToString());
-            System.Console.WriteLine("(P) Add or Remove Portfolios");
-            System.Console.WriteLine("(X) Deposit, Withdraw, or Transfer");
-            System.Console.WriteLine("(G) View Gains/Losses");
-            System.Console.WriteLine("(S) Stock Prices");
-            System.Console.WriteLine("(T) Trade");
-            System.Console.WriteLine("(Spacebar) Advance Day");
-            System.Console.WriteLine("(Q) Quit");
-            System.Console.Write(">");
-            validInputKey = false;
-            while (!validInputKey)
-            {
-                validInputKey = true;
-                inputKey = Console.ReadKey(true).Key;
-                switch (inputKey)
-                {
-                    case ConsoleKey.P:
-                        PortMenu();
-                        break;
-                    case ConsoleKey.X:
-                        MoneyMenu();
-                        break;
-                    case ConsoleKey.G:
-                        try
-                        {
-                            System.Console.Write("\nEnter Portfolio Name: ");
-                            string port = System.Console.ReadLine();
-                            System.Console.Write("\nEnter Start Date Year: ");
-                            int sYear = Int32.Parse(System.Console.ReadLine());
-                            System.Console.Write("\nEnter Start Date Month: ");
-                            int sMonth = Int32.Parse(System.Console.ReadLine());
-                            System.Console.Write("\nEnter Start Date Day: ");
-                            int sDay = Int32.Parse(System.Console.ReadLine());
-                            System.Console.Write("\nEnter End Date Year: ");
-                            int eYear = Int32.Parse(System.Console.ReadLine());
-                            System.Console.Write("\nEnter End Date Month: ");
-                            int eMonth = Int32.Parse(System.Console.ReadLine());
-                            System.Console.Write("\nEnter End Date Day: ");
-                            int eDay = Int32.Parse(System.Console.ReadLine());
-                            System.Console.Write("Net Difference of $" +
-                                user.GainLossReport(port, new DateTime(sYear, sMonth, sDay),
-                                new DateTime(eYear, eMonth, eDay)));
-                        }// try
-                        catch (Exception)
-                        {
-                            System.Console.WriteLine("Invalid Input\n>");
-                            validInputKey = false;
-                        }
-                        break;
-                    case ConsoleKey.S:
-                        System.Console.WriteLine();
-                        foreach (string symbol in this.stocks.Keys)
-                            System.Console.WriteLine(symbol + " $" + this.stocks[symbol].price
-                                + "  " + this.stocks[symbol].name);
-                        break;
-                    case ConsoleKey.T:
-                        PositionMenu();
-                        break;
-                    case ConsoleKey.Spacebar:
-                        DayMenu();
-                        break;
-                    case ConsoleKey.Q:
-                    case ConsoleKey.Escape:
-                        break;
-                    default:
-                        validInputKey = false;
-                        break;
-                }
-            }// while
-            System.Console.WriteLine("\n");
-        }// while
-    }
-
+        RunMenu(topMenu);
+    }// Run
 }
 

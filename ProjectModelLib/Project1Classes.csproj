@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GeneratedCode\Menu.cs" />
+    <Compile Include="GeneratedCode\MenuItem.cs" />
     <Compile Include="GeneratedCode\Portfolio.cs" />
     <Compile Include="GeneratedCode\Position.cs" />
     <Compile Include="GeneratedCode\Purchase.cs" />
